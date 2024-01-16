@@ -21,7 +21,6 @@ class EntityNotFoundException(Exception):
     def __init__(self, *, entity_name: str, entity_id: str):
         self.entity_name = entity_name
         self.entity_id = entity_id
-        self.msg = f"Unable to find {entity_name} with id={entity_id}"
 
 
 #   -------- animals --------   #
