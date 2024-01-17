@@ -3,7 +3,6 @@ from fastapi.responses import JSONResponse, HTMLResponse
 
 from backend.routers.animals import animals_router
 from backend.routers.users import users_router
-from backend.database import EntityNotFoundException
 
 app = FastAPI(
     title="buddy system API",
@@ -13,23 +12,6 @@ app = FastAPI(
 
 app.include_router(animals_router)
 app.include_router(users_router)
-
-
-@app.exception_handler(EntityNotFoundException)
-def handle_model_not_found(
-    request: Request,
-    exc: EntityNotFoundException,
-) -> JSONResponse:
-    return JSONResponse(
-        status_code=404,
-        content={
-            "detail": {
-                "type": "entity_not_found",
-                "entity_name": exc.entity_name,
-                "entity_id": exc.entity_id,
-            },
-        },
-    )
 
 
 @app.get("/", include_in_schema=False)

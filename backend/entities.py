@@ -86,7 +86,7 @@ class UserCreate(BaseModel):
 class UserUpdate(BaseModel):
     """Represents parameters for updating a user in the system."""
 
-    name: str = None
+    id: str = None
     email: str = None
 
 
@@ -100,7 +100,7 @@ class AnimalCollection(BaseModel):
     """Represents an API response for a collection of animals."""
 
     meta: Metadata
-    animals: list[Animal]
+    animals: list[AnimalInDB]
 
 
 class UserCollection(BaseModel):
