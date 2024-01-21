@@ -7,6 +7,7 @@ from backend.entities import (
     AnimalCollection,
     AnimalCreate,
     AnimalInDB,
+    AnimalUpdate,
 )
 from backend import database as db
 
@@ -44,21 +45,31 @@ def create_animal(animal_create: AnimalCreate):
     return db.create_animal(animal_create)
 
 
-@animals_router.get("/{animal_id}", response_model=AnimalInDB)
+@animals_router.get(
+    "/{animal_id}",
+    response_model=AnimalInDB,
+    description="Get an animal for a given animal id.",
+)
 def get_animal(animal_id: str):
     """Get an animal for a given id."""
 
     return db.get_animal_by_id(animal_id)
 
 
-@animals_router.put("/{animal_id}")
-def update_animal(animal_id: str):
-    pass
+@animals_router.put("/{animal_id}", response_model=AnimalInDB)
+def update_animal(animal_id: str, animal_update: AnimalUpdate):
+    """Update an animal for a given id."""
+
+    return db.update_animal(animal_id, animal_update)
 
 
-@animals_router.delete("/{animal_id}")
-def delete_animal(animal_id: str):
-    pass
+@animals_router.delete(
+    "/{animal_id}",
+    status_code=204,
+    response_model=None,
+)
+def delete_animal(animal_id: str) -> None:
+    db.delete_animal(animal_id)
 
 
 @animals_router.get("/{animal_id}/foster")
