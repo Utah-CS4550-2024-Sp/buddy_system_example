@@ -24,8 +24,14 @@ class UserInDB(BaseModel):
     created_at: datetime
 
 
-class Animal(AnimalInDB):
+class AnimalResponse(BaseModel):
     """Represents an API response for an animal."""
+
+    animal: AnimalInDB
+
+
+class Animal(AnimalInDB):
+    """(unused) Represents an API response for an animal."""
 
     adopter: str = None
     adoption_date: date = None
