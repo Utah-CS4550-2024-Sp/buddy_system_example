@@ -99,20 +99,28 @@ def test_create_animal():
     response = client.post("/animals", json=create_params)
 
     assert response.status_code == 200
-    animal = response.json()
+    # old thing
+    # animal = response.json()
+    # new thing
+    # animal = resposne.json()["animal"]
+    data = response.json()
+    assert "animal" in data
+    animal = data["animal"]
     for key, value in create_params.items():
         assert animal[key] == value
 
     response = client.get(f"/animals/{animal['id']}")
     assert response.status_code == 200
-    animal = response.json()
+    data = response.json()
+    assert "animal" in data
+    animal = data["animal"]
     for key, value in create_params.items():
         assert animal[key] == value
 
 
 def test_get_animal():
     animal_id = "75ada30d3f504c9682683c3b6fad4bff"
-    expected_response = {
+    expected_animal = {
         "id": animal_id,
         "name": "nibbles",
         "age": 2,
@@ -124,7 +132,7 @@ def test_get_animal():
     client = TestClient(app)
     response = client.get(f"/animals/{animal_id}")
     assert response.status_code == 200
-    assert response.json() == expected_response
+    assert response.json() == {"animal": expected_animal}
 
 
 def test_get_animal_invalid_id():
@@ -144,7 +152,7 @@ def test_get_animal_invalid_id():
 def test_update_animal_name_age():
     animal_id = "75ada30d3f504c9682683c3b6fad4bff"
     update_params = {"name": "nibbles, jr", "age": 3}
-    expected_response = {
+    expected_animal = {
         "id": animal_id,
         "name": update_params["name"],
         "age": update_params["age"],
@@ -156,12 +164,12 @@ def test_update_animal_name_age():
     client = TestClient(app)
     response = client.put(f"/animals/{animal_id}", json=update_params)
     assert response.status_code == 200
-    assert response.json() == expected_response
+    assert response.json() == {"animal": expected_animal}
 
     # test that the update is persisted
     response = client.get(f"/animals/{animal_id}")
     assert response.status_code == 200
-    assert response.json() == expected_response
+    assert response.json() == {"animal": expected_animal}
 
 
 def test_update_animal_invalid_id():

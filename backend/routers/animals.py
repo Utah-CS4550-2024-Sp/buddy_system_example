@@ -8,6 +8,7 @@ from backend.entities import (
     AnimalCreate,
     AnimalInDB,
     AnimalUpdate,
+    AnimalResponse,
 )
 from backend import database as db
 
@@ -38,29 +39,31 @@ def get_animals(
     )
 
 
-@animals_router.post("", response_model=AnimalInDB)
+@animals_router.post("", response_model=AnimalResponse)
 def create_animal(animal_create: AnimalCreate):
     """Add a new animal to the buddy system."""
 
-    return db.create_animal(animal_create)
+    return AnimalResponse(animal=db.create_animal(animal_create))
 
 
 @animals_router.get(
     "/{animal_id}",
-    response_model=AnimalInDB,
+    response_model=AnimalResponse,
     description="Get an animal for a given animal id.",
 )
 def get_animal(animal_id: str):
     """Get an animal for a given id."""
 
-    return db.get_animal_by_id(animal_id)
+    return AnimalResponse(animal=db.get_animal_by_id(animal_id))
 
 
-@animals_router.put("/{animal_id}", response_model=AnimalInDB)
+@animals_router.put("/{animal_id}", response_model=AnimalResponse)
 def update_animal(animal_id: str, animal_update: AnimalUpdate):
     """Update an animal for a given id."""
 
-    return db.update_animal(animal_id, animal_update)
+    return AnimalResponse(
+        animal=db.update_animal(animal_id, animal_update),
+    )
 
 
 @animals_router.delete(
