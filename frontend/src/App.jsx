@@ -19,10 +19,11 @@ function ColorListItem({ color, removeColor }) {
   // equivalent to
   // function ColorListItem(props) {
   //   const color = props.color;
+  //   const removeColor = props.removeColor;
   // }
   // or
   // function ColorListItem(props) {
-  //   const { color } = props;
+  //   const { color, removeColor } = props;
   // }
   const style = {
     backgroundColor: color,
@@ -96,6 +97,7 @@ function App() {
     </section>
   )
 
+  // original version using the React.createElement function directly
   return createElement("section", {},
     createElement("h1", {}, "list of colors"),
     createElement("ul",
