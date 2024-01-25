@@ -1,6 +1,6 @@
 from datetime import date, datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class AnimalInDB(BaseModel):
@@ -71,7 +71,11 @@ class AnimalUpdate(BaseModel):
 
     name: str = None
     age: int = None
-    kind: str = None
+    kind: str = Field(
+        default=None,
+        description="the type of animal",
+        examples=["dog", "cat", "turtle"],
+    )
     fixed: bool = None
     vaccinated: bool = None
 
