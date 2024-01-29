@@ -95,7 +95,7 @@ function App() {
       <h2>add new color</h2>
       <ColorForm addColor={addColor} />
     </section>
-  )
+  );
 
   // original version using the React.createElement function directly
   return createElement("section", {},
