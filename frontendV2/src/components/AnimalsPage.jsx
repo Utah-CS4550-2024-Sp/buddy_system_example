@@ -6,10 +6,8 @@ function AnimalPreview({ animal }) {
   return (
     <Link className="animal-preview" to={`/animals/${animal.id}`}>
       <div className="animal-name">{animal.name}</div>
-      <div className="animal-details">
-        <div className="animal-detail">{animal.kind}</div>
-        <div className="animal-detail">{animal.age}</div>
-      </div>
+      <div className="animal-detail">{animal.kind}</div>
+      <div className="animal-detail">{animal.age}</div>
     </Link>
   );
 }
@@ -50,11 +48,13 @@ function AnimalCardWrapper() {
 function AnimalCard({ animal }) {
   return (
     <div className="animal-card">
-      {["name", "kind", "age", "intake_date", "fixed", "vaccinated"].map((attr) => (
+      <h2 className="animal-card-title">{animal.name || "name"}</h2>
+      <hr />
+      {["kind", "age", "intake_date", "fixed", "vaccinated"].map((attr) => (
         <div key={attr} className="animal-card-row">
           <div className="animal-detail-category">{attr}</div>
           <div className="animal-detail-value">
-            {(animal || {})[attr]?.toString()}
+            {(animal || {})[attr]?.toString() || attr}
           </div>
         </div>
       ))}

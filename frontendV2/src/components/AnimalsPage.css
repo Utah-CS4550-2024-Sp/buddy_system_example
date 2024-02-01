@@ -1,7 +1,7 @@
 .animals-page {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    grid-template-rows: 45vh;
+    grid-template-rows: 50vh;
     gap: 50px;
 }
 
@@ -12,24 +12,19 @@
 }
 
 .animal-preview {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 3fr 1fr 1fr;
     border: 1px solid white;
     background-color: #333333;
     padding: 10px;
     color: lightgray;
+    align-items: center;
+    justify-items: left;
 }
 
 .animal-preview:hover {
     background-color: #444444;
     color: white;
-}
-
-.animal-details {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    padding: 5px;
 }
 
 .animal-detail, .animal-name {
@@ -49,8 +44,14 @@
     border: 2px solid lightgray;
 }
 
+.animal-card-title {
+    text-align: center;
+    margin: 20px 0;
+}
+
 .animal-card-row {
-    padding: 10px 20px;
+    padding: 8px 20px;
     display: grid;
+    border-bottom: 1px solid lightgray;
     grid-template-columns: 1fr 1fr;
 }
