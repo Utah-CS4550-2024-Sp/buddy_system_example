@@ -1,0 +1,56 @@
+.animals-page {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 45vh;
+    gap: 50px;
+}
+
+.animal-list {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.animal-preview {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid white;
+    background-color: #333333;
+    padding: 10px;
+    color: lightgray;
+}
+
+.animal-preview:hover {
+    background-color: #444444;
+    color: white;
+}
+
+.animal-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 5px;
+}
+
+.animal-detail, .animal-name {
+    padding: 0 5px;
+}
+
+.animal-detail {
+    font-size: x-small;
+}
+
+.animal-name {
+    font-weight: bolder;
+}
+
+.animal-card {
+    text-align: left;
+    border: 2px solid lightgray;
+}
+
+.animal-card-row {
+    padding: 10px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
