@@ -1,18 +1,80 @@
 from datetime import date, datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from sqlmodel import Field, SQLModel
 
 
-class AnimalInDB(BaseModel):
-    """Represents an animal in the database."""
+class Metadata(BaseModel):
+    """Represents metadata for a collection."""
 
-    id: str
+    count: int
+
+
+# ---------- animals ---------- #
+
+class AnimalInDB(SQLModel, table=True):
+    """Database model for an animal."""
+
+    __tablename__ = "animals"
+
+    id: int = Field(default=None, primary_key=True)
+    name: str
+    age: int
+    kind: str
+    fixed: bool
+    vaccinated: bool
+    intake_date: date = Field(default_factory=date.today)
+
+
+# ----- request models ----- #
+
+class AnimalCreate(SQLModel):
+    """Represents parameters for adding a new animal to the system."""
+
+    name: str
+    age: int
+    kind: str
+    fixed: bool = Field(default=False)
+    vaccinated: bool = Field(default=False)
+
+
+class AnimalUpdate(SQLModel):
+    """Represents parameters for updating an animal in the system."""
+
+    name: str = None
+    age: int = None
+    kind: str = None
+    fixed: bool = None
+    vaccinated: bool = None
+
+
+# ----- response models ----- #
+
+class Animal(SQLModel):
+    """Data model for an animal."""
+    id: int
     name: str
     age: int
     kind: str
     fixed: bool
     vaccinated: bool
     intake_date: date
+
+
+class AnimalResponse(BaseModel):
+    """Represents an API response for an animal."""
+
+    animal: Animal
+
+
+class AnimalCollection(BaseModel):
+    """Represents an API response for a collection of animals."""
+
+    meta: Metadata
+    animals: list[Animal]
+
+
+# ---------- users ---------- #
 
 
 class UserInDB(BaseModel):
@@ -24,66 +86,12 @@ class UserInDB(BaseModel):
     created_at: datetime
 
 
-class AnimalResponse(BaseModel):
-    """Represents an API response for an animal."""
-
-    animal: AnimalInDB
-
-
-class Animal(AnimalInDB):
-    """(unused) Represents an API response for an animal."""
-
-    adopter: str = None
-    adoption_date: date = None
-
-
 class User(BaseModel):
     """Represents an API response for a user."""
 
     id: str
     name: str
     created_at: datetime
-
-
-class Foster(BaseModel):
-    """Represents an API response for a foster."""
-
-    user: User
-    animal: Animal
-    start_date: date
-    end_date: date
-
-
-class Adoption(BaseModel):
-    """Represents an API response for an adoption."""
-
-    user: User
-    animal: Animal
-    adoption_date: date
-
-
-class AnimalCreate(BaseModel):
-    """Represents parameters for adding a new animal to the system."""
-
-    name: str
-    age: int
-    kind: str
-    fixed: bool = False
-    vaccinated: bool = False
-
-
-class AnimalUpdate(BaseModel):
-    """Represents parameters for updating an animal in the system."""
-
-    name: str = None
-    age: int = None
-    kind: str = Field(
-        default=None,
-        description="the type of animal",
-        examples=["dog", "cat", "turtle"],
-    )
-    fixed: bool = None
-    vaccinated: bool = None
 
 
 class UserCreate(BaseModel):
@@ -99,18 +107,6 @@ class UserUpdate(BaseModel):
     id: str = None
     email: str = None
 
-
-class Metadata(BaseModel):
-    """Represents metadata for a collection."""
-
-    count: int
-
-
-class AnimalCollection(BaseModel):
-    """Represents an API response for a collection of animals."""
-
-    meta: Metadata
-    animals: list[AnimalInDB]
 
 
 class UserCollection(BaseModel):

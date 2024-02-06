@@ -1,12 +1,12 @@
 from datetime import date
 from typing import Literal
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlmodel import Session
 
 from backend.entities import (
     AnimalCollection,
     AnimalCreate,
-    AnimalInDB,
     AnimalUpdate,
     AnimalResponse,
 )
@@ -20,12 +20,13 @@ def get_animals(
     sort: Literal["age", "name", "intake_date"] = "name",
     intake_after: date = None,
     intake_before: date = None,
+    session: Session = Depends(db.get_session)
 ):
     """Get a collection of animals."""
 
     # getattr(animal, "age") ~> animal.age
     sort_key = lambda animal: getattr(animal, sort)
-    animals = db.get_all_animals()
+    animals = db.get_all_animals(session)
 
     if intake_after is not None:
         animals = [animal for animal in animals if animal.intake_date >= intake_after]
@@ -40,46 +41,41 @@ def get_animals(
 
 
 @animals_router.post("", response_model=AnimalResponse)
-def create_animal(animal_create: AnimalCreate):
-    """Add a new animal to the buddy system."""
+def create_animal(
+    animal_create: AnimalCreate,
+    session: Session = Depends(db.get_session)
+):
+    """Add a new animal."""
 
-    return AnimalResponse(animal=db.create_animal(animal_create))
+    return AnimalResponse(animal=db.create_animal(session, animal_create))
 
 
-@animals_router.get(
-    "/{animal_id}",
-    response_model=AnimalResponse,
-    description="Get an animal for a given animal id.",
-)
-def get_animal(animal_id: str):
+@animals_router.get("/{animal_id}", response_model=AnimalResponse)
+def get_animal(
+    animal_id: int,
+    session: Session = Depends(db.get_session)
+):
     """Get an animal for a given id."""
 
-    return AnimalResponse(animal=db.get_animal_by_id(animal_id))
+    return AnimalResponse(animal=db.get_animal_by_id(session, animal_id))
 
 
 @animals_router.put("/{animal_id}", response_model=AnimalResponse)
-def update_animal(animal_id: str, animal_update: AnimalUpdate):
+def update_animal(
+    animal_id: str,
+    animal_update: AnimalUpdate,
+    session: Session = Depends(db.get_session),
+):
     """Update an animal for a given id."""
 
     return AnimalResponse(
-        animal=db.update_animal(animal_id, animal_update),
+        animal=db.update_animal(session, animal_id, animal_update),
     )
 
 
-@animals_router.delete(
-    "/{animal_id}",
-    status_code=204,
-    response_model=None,
-)
-def delete_animal(animal_id: str) -> None:
-    db.delete_animal(animal_id)
-
-
-@animals_router.get("/{animal_id}/foster")
-def get_animal_foster(animal_id: str):
-    pass
-
-
-@animals_router.get("/{animal_id}/adoption")
-def get_animal_adoption(animal_id: str):
-    pass
+@animals_router.delete("/{animal_id}", status_code=204, response_model=None)
+def delete_animal(
+    animal_id: int,
+    session: Session = Depends(db.get_session),
+) -> None:
+    db.delete_animal(session, animal_id)
