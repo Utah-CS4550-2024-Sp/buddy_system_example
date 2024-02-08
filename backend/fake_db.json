@@ -1,1 +1,277 @@
-{"animals": {"75ada30d3f504c9682683c3b6fad4bff": {"id": "75ada30d3f504c9682683c3b6fad4bff", "name": "nibbles", "age": 2, "kind": "cat", "fixed": false, "vaccinated": false, "intake_date": "2023-12-10"}, "2eea576891f34d10b4d3455c672ea226": {"id": "2eea576891f34d10b4d3455c672ea226", "name": "chompers", "age": 10, "kind": "dog", "fixed": true, "vaccinated": true, "intake_date": "2021-06-08"}, "803d91e750d9489ea6aef6169df217dc": {"id": "803d91e750d9489ea6aef6169df217dc", "name": "mr. spock", "age": 2, "kind": "cat", "fixed": true, "vaccinated": true, "intake_date": "2021-12-14"}, "184d944f383e4fa7a1c068195dd4bec6": {"id": "184d944f383e4fa7a1c068195dd4bec6", "name": "gladys", "age": 12, "kind": "dog", "fixed": true, "vaccinated": true, "intake_date": "2022-06-02"}, "589d4fde29b142349ebae7c57e11bc22": {"id": "589d4fde29b142349ebae7c57e11bc22", "name": "soupsoup", "age": 10, "kind": "turtle", "fixed": true, "vaccinated": false, "intake_date": "2022-03-22"}, "765aaeb9bf2147f9a9cc00fe151cb086": {"id": "765aaeb9bf2147f9a9cc00fe151cb086", "name": "mothra", "age": 2, "kind": "dog", "fixed": false, "vaccinated": true, "intake_date": "2022-02-04"}, "99b45e558b62426b9a156f9eb31d4ee3": {"id": "99b45e558b62426b9a156f9eb31d4ee3", "name": "mulder", "age": 0, "kind": "cat", "fixed": true, "vaccinated": true, "intake_date": "2019-02-12"}, "3a3bcdba3361464f8bb59ac45c1349c7": {"id": "3a3bcdba3361464f8bb59ac45c1349c7", "name": "scully", "age": 8, "kind": "cat", "fixed": true, "vaccinated": true, "intake_date": "2021-02-15"}, "0ab07949e27d466cae5854893aac9af9": {"id": "0ab07949e27d466cae5854893aac9af9", "name": "bagels", "age": 1, "kind": "cat", "fixed": true, "vaccinated": false, "intake_date": "2019-11-22"}, "f081db9542774fc1b7a7e0b55f758e57": {"id": "f081db9542774fc1b7a7e0b55f758e57", "name": "garbanzo", "age": 5, "kind": "cat", "fixed": false, "vaccinated": false, "intake_date": "2021-09-05"}, "2fae8f633ec74544bfc29fed304453c8": {"id": "2fae8f633ec74544bfc29fed304453c8", "name": "patio", "age": 12, "kind": "dog", "fixed": false, "vaccinated": true, "intake_date": "2023-12-19"}, "d433343c632745568a01f115c6e853e3": {"id": "d433343c632745568a01f115c6e853e3", "name": "paperclip", "age": 11, "kind": "cat", "fixed": false, "vaccinated": true, "intake_date": "2021-02-03"}, "e9a356a1de8f4fdf915c65d4841e737c": {"id": "e9a356a1de8f4fdf915c65d4841e737c", "name": "ramen", "age": 13, "kind": "cat", "fixed": true, "vaccinated": false, "intake_date": "2022-12-20"}, "bde9227e13844d7e9568dd2a06879bf5": {"id": "bde9227e13844d7e9568dd2a06879bf5", "name": "tapioca", "age": 2, "kind": "dog", "fixed": true, "vaccinated": true, "intake_date": "2020-08-12"}, "52e1dd7334974841a36e3f23a1ea3187": {"id": "52e1dd7334974841a36e3f23a1ea3187", "name": "stir fry", "age": 10, "kind": "cat", "fixed": true, "vaccinated": false, "intake_date": "2021-12-23"}, "a1efca91d8604b36939ad37c21a9d132": {"id": "a1efca91d8604b36939ad37c21a9d132", "name": "waffle party", "age": 4, "kind": "cat", "fixed": false, "vaccinated": false, "intake_date": "2020-10-06"}}, "users": {"juniper": {"id": "juniper", "email": "juniper@cool.email", "created_at": "2022-06-10T12:02:45"}, "reggie": {"id": "reggie", "email": "reggie@buddy.system", "created_at": "2021-06-26T13:26:33"}, "digby": {"id": "digby", "email": "digby@example.com", "created_at": "2020-10-28T13:11:46"}, "gertrude": {"id": "gertrude", "email": "gertrude@example.com", "created_at": "2020-02-01T17:46:55"}, "ambrose": {"id": "ambrose", "email": "ambrose@cool.email", "created_at": "2023-02-15T13:23:46"}, "beatrice": {"id": "beatrice", "email": "beatrice@example.com", "created_at": "2023-10-02T20:54:36"}, "frankie": {"id": "frankie", "email": "frankie@cool.email", "created_at": "2022-10-02T22:28:01"}, "felix": {"id": "felix", "email": "felix@buddy.system", "created_at": "2020-01-26T09:24:29"}}, "fosters": [{"user_id": "digby", "animal_id": "75ada30d3f504c9682683c3b6fad4bff", "start_date": "2023-12-10", "end_date": "2023-12-25"}, {"user_id": "reggie", "animal_id": "803d91e750d9489ea6aef6169df217dc", "start_date": "2021-12-14", "end_date": "2022-01-09"}, {"user_id": "reggie", "animal_id": "184d944f383e4fa7a1c068195dd4bec6", "start_date": "2022-06-02", "end_date": "2022-06-23"}, {"user_id": "felix", "animal_id": "589d4fde29b142349ebae7c57e11bc22", "start_date": "2022-03-22", "end_date": "2022-04-05"}, {"user_id": "gertrude", "animal_id": "3a3bcdba3361464f8bb59ac45c1349c7", "start_date": "2021-02-15", "end_date": "2021-02-25"}, {"user_id": "felix", "animal_id": "d433343c632745568a01f115c6e853e3", "start_date": "2021-02-03", "end_date": "2021-02-28"}, {"user_id": "digby", "animal_id": "52e1dd7334974841a36e3f23a1ea3187", "start_date": "2021-12-23", "end_date": "2022-01-11"}, {"user_id": "gertrude", "animal_id": "a1efca91d8604b36939ad37c21a9d132", "start_date": "2020-10-06", "end_date": "2020-10-27"}], "adoptions": [{"user_id": "ambrose", "animal_id": "75ada30d3f504c9682683c3b6fad4bff", "adoption_date": "2024-01-04"}, {"user_id": "gertrude", "animal_id": "2eea576891f34d10b4d3455c672ea226", "adoption_date": "2021-06-13"}, {"user_id": "ambrose", "animal_id": "184d944f383e4fa7a1c068195dd4bec6", "adoption_date": "2022-06-30"}, {"user_id": "frankie", "animal_id": "589d4fde29b142349ebae7c57e11bc22", "adoption_date": "2022-04-06"}, {"user_id": "ambrose", "animal_id": "99b45e558b62426b9a156f9eb31d4ee3", "adoption_date": "2019-02-14"}, {"user_id": "frankie", "animal_id": "d433343c632745568a01f115c6e853e3", "adoption_date": "2021-03-03"}, {"user_id": "ambrose", "animal_id": "a1efca91d8604b36939ad37c21a9d132", "adoption_date": "2020-11-05"}]}
+{
+    "animals": {
+        "75ada30d3f504c9682683c3b6fad4bff": {
+            "id": "75ada30d3f504c9682683c3b6fad4bff",
+            "name": "nibbles",
+            "age": 2,
+            "kind": "cat",
+            "fixed": false,
+            "vaccinated": false,
+            "intake_date": "2023-12-10"
+        },
+        "2eea576891f34d10b4d3455c672ea226": {
+            "id": "2eea576891f34d10b4d3455c672ea226",
+            "name": "chompers",
+            "age": 10,
+            "kind": "dog",
+            "fixed": true,
+            "vaccinated": true,
+            "intake_date": "2021-06-08"
+        },
+        "803d91e750d9489ea6aef6169df217dc": {
+            "id": "803d91e750d9489ea6aef6169df217dc",
+            "name": "mr. spock",
+            "age": 2,
+            "kind": "cat",
+            "fixed": true,
+            "vaccinated": true,
+            "intake_date": "2021-12-14"
+        },
+        "184d944f383e4fa7a1c068195dd4bec6": {
+            "id": "184d944f383e4fa7a1c068195dd4bec6",
+            "name": "gladys",
+            "age": 12,
+            "kind": "dog",
+            "fixed": true,
+            "vaccinated": true,
+            "intake_date": "2022-06-02"
+        },
+        "589d4fde29b142349ebae7c57e11bc22": {
+            "id": "589d4fde29b142349ebae7c57e11bc22",
+            "name": "soupsoup",
+            "age": 10,
+            "kind": "turtle",
+            "fixed": true,
+            "vaccinated": false,
+            "intake_date": "2022-03-22"
+        },
+        "765aaeb9bf2147f9a9cc00fe151cb086": {
+            "id": "765aaeb9bf2147f9a9cc00fe151cb086",
+            "name": "mothra",
+            "age": 2,
+            "kind": "dog",
+            "fixed": false,
+            "vaccinated": true,
+            "intake_date": "2022-02-04"
+        },
+        "99b45e558b62426b9a156f9eb31d4ee3": {
+            "id": "99b45e558b62426b9a156f9eb31d4ee3",
+            "name": "mulder",
+            "age": 0,
+            "kind": "cat",
+            "fixed": true,
+            "vaccinated": true,
+            "intake_date": "2019-02-12"
+        },
+        "3a3bcdba3361464f8bb59ac45c1349c7": {
+            "id": "3a3bcdba3361464f8bb59ac45c1349c7",
+            "name": "scully",
+            "age": 8,
+            "kind": "cat",
+            "fixed": true,
+            "vaccinated": true,
+            "intake_date": "2021-02-15"
+        },
+        "0ab07949e27d466cae5854893aac9af9": {
+            "id": "0ab07949e27d466cae5854893aac9af9",
+            "name": "bagels",
+            "age": 1,
+            "kind": "cat",
+            "fixed": true,
+            "vaccinated": false,
+            "intake_date": "2019-11-22"
+        },
+        "f081db9542774fc1b7a7e0b55f758e57": {
+            "id": "f081db9542774fc1b7a7e0b55f758e57",
+            "name": "garbanzo",
+            "age": 5,
+            "kind": "cat",
+            "fixed": false,
+            "vaccinated": false,
+            "intake_date": "2021-09-05"
+        },
+        "2fae8f633ec74544bfc29fed304453c8": {
+            "id": "2fae8f633ec74544bfc29fed304453c8",
+            "name": "patio",
+            "age": 12,
+            "kind": "dog",
+            "fixed": false,
+            "vaccinated": true,
+            "intake_date": "2023-12-19"
+        },
+        "d433343c632745568a01f115c6e853e3": {
+            "id": "d433343c632745568a01f115c6e853e3",
+            "name": "paperclip",
+            "age": 11,
+            "kind": "cat",
+            "fixed": false,
+            "vaccinated": true,
+            "intake_date": "2021-02-03"
+        },
+        "e9a356a1de8f4fdf915c65d4841e737c": {
+            "id": "e9a356a1de8f4fdf915c65d4841e737c",
+            "name": "ramen",
+            "age": 13,
+            "kind": "cat",
+            "fixed": true,
+            "vaccinated": false,
+            "intake_date": "2022-12-20"
+        },
+        "bde9227e13844d7e9568dd2a06879bf5": {
+            "id": "bde9227e13844d7e9568dd2a06879bf5",
+            "name": "tapioca",
+            "age": 2,
+            "kind": "dog",
+            "fixed": true,
+            "vaccinated": true,
+            "intake_date": "2020-08-12"
+        },
+        "52e1dd7334974841a36e3f23a1ea3187": {
+            "id": "52e1dd7334974841a36e3f23a1ea3187",
+            "name": "stir fry",
+            "age": 10,
+            "kind": "cat",
+            "fixed": true,
+            "vaccinated": false,
+            "intake_date": "2021-12-23"
+        },
+        "a1efca91d8604b36939ad37c21a9d132": {
+            "id": "a1efca91d8604b36939ad37c21a9d132",
+            "name": "waffle party",
+            "age": 4,
+            "kind": "cat",
+            "fixed": false,
+            "vaccinated": false,
+            "intake_date": "2020-10-06"
+        }
+    },
+    "users": {
+        "juniper": {
+            "id": "juniper",
+            "email": "juniper@cool.email",
+            "created_at": "2022-06-10T12:02:45"
+        },
+        "reggie": {
+            "id": "reggie",
+            "email": "reggie@buddy.system",
+            "created_at": "2021-06-26T13:26:33"
+        },
+        "digby": {
+            "id": "digby",
+            "email": "digby@example.com",
+            "created_at": "2020-10-28T13:11:46"
+        },
+        "gertrude": {
+            "id": "gertrude",
+            "email": "gertrude@example.com",
+            "created_at": "2020-02-01T17:46:55"
+        },
+        "ambrose": {
+            "id": "ambrose",
+            "email": "ambrose@cool.email",
+            "created_at": "2023-02-15T13:23:46"
+        },
+        "beatrice": {
+            "id": "beatrice",
+            "email": "beatrice@example.com",
+            "created_at": "2023-10-02T20:54:36"
+        },
+        "frankie": {
+            "id": "frankie",
+            "email": "frankie@cool.email",
+            "created_at": "2022-10-02T22:28:01"
+        },
+        "felix": {
+            "id": "felix",
+            "email": "felix@buddy.system",
+            "created_at": "2020-01-26T09:24:29"
+        }
+    },
+    "fosters": [
+        {
+            "user_id": "digby",
+            "animal_id": "75ada30d3f504c9682683c3b6fad4bff",
+            "start_date": "2023-12-10",
+            "end_date": "2023-12-25"
+        },
+        {
+            "user_id": "reggie",
+            "animal_id": "803d91e750d9489ea6aef6169df217dc",
+            "start_date": "2021-12-14",
+            "end_date": "2022-01-09"
+        },
+        {
+            "user_id": "reggie",
+            "animal_id": "184d944f383e4fa7a1c068195dd4bec6",
+            "start_date": "2022-06-02",
+            "end_date": "2022-06-23"
+        },
+        {
+            "user_id": "felix",
+            "animal_id": "589d4fde29b142349ebae7c57e11bc22",
+            "start_date": "2022-03-22",
+            "end_date": "2022-04-05"
+        },
+        {
+            "user_id": "gertrude",
+            "animal_id": "3a3bcdba3361464f8bb59ac45c1349c7",
+            "start_date": "2021-02-15",
+            "end_date": "2021-02-25"
+        },
+        {
+            "user_id": "felix",
+            "animal_id": "d433343c632745568a01f115c6e853e3",
+            "start_date": "2021-02-03",
+            "end_date": "2021-02-28"
+        },
+        {
+            "user_id": "digby",
+            "animal_id": "52e1dd7334974841a36e3f23a1ea3187",
+            "start_date": "2021-12-23",
+            "end_date": "2022-01-11"
+        },
+        {
+            "user_id": "gertrude",
+            "animal_id": "a1efca91d8604b36939ad37c21a9d132",
+            "start_date": "2020-10-06",
+            "end_date": "2020-10-27"
+        }
+    ],
+    "adoptions": [
+        {
+            "user_id": "ambrose",
+            "animal_id": "75ada30d3f504c9682683c3b6fad4bff",
+            "adoption_date": "2024-01-04"
+        },
+        {
+            "user_id": "gertrude",
+            "animal_id": "2eea576891f34d10b4d3455c672ea226",
+            "adoption_date": "2021-06-13"
+        },
+        {
+            "user_id": "ambrose",
+            "animal_id": "184d944f383e4fa7a1c068195dd4bec6",
+            "adoption_date": "2022-06-30"
+        },
+        {
+            "user_id": "frankie",
+            "animal_id": "589d4fde29b142349ebae7c57e11bc22",
+            "adoption_date": "2022-04-06"
+        },
+        {
+            "user_id": "ambrose",
+            "animal_id": "99b45e558b62426b9a156f9eb31d4ee3",
+            "adoption_date": "2019-02-14"
+        },
+        {
+            "user_id": "frankie",
+            "animal_id": "d433343c632745568a01f115c6e853e3",
+            "adoption_date": "2021-03-03"
+        },
+        {
+            "user_id": "ambrose",
+            "animal_id": "a1efca91d8604b36939ad37c21a9d132",
+            "adoption_date": "2020-11-05"
+        }
+    ]
+}

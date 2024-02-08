@@ -1,35 +1,57 @@
 from datetime import date, datetime
+from typing import Optional
 
 from pydantic import BaseModel
 from sqlmodel import Field, SQLModel
 
 
-class Metadata(BaseModel):
-    """Represents metadata for a collection."""
-
-    count: int
-
-
-# ---------- animals ---------- #
+# ------------------------------------- #
+#            database models            #
+# ------------------------------------- #
 
 class AnimalInDB(SQLModel, table=True):
-    """Database model for an animal."""
+    """Database model for animal."""
 
     __tablename__ = "animals"
 
-    id: int = Field(default=None, primary_key=True)
+    id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     age: int
     kind: str
     fixed: bool
     vaccinated: bool
-    intake_date: date = Field(default_factory=date.today)
+    intake_date: Optional[date] = Field(default_factory=date.today)
+    adopter_id: Optional[int] = Field(default=None, foreign_key="users.id")
+    adoption_date: Optional[date] = Field(default=None)
 
 
-# ----- request models ----- #
+class UserInDB(SQLModel, table=True):
+    """Database model for user."""
+
+    __tablename__ = "users"
+
+    id: int = Field(default=None, primary_key=True)
+    username: str = Field(unique=True)
+    email: str
+    hashed_password: str
+    created_at: Optional[datetime] = Field(default_factory=datetime.now)
+
+
+class FosterInDB(SQLModel, table=True):
+    __tablename__ = "fosters"
+
+    user_id: int = Field(primary_key=True, foreign_key="users.id")
+    animal_id: int = Field(primary_key=True, foreign_key="animals.id")
+    start_date: date
+    end_date: date
+
+
+# ------------------------------------- #
+#            request models            #
+# ------------------------------------- #
 
 class AnimalCreate(SQLModel):
-    """Represents parameters for adding a new animal to the system."""
+    """Request model for adding new animal to the system."""
 
     name: str
     age: int
@@ -39,19 +61,47 @@ class AnimalCreate(SQLModel):
 
 
 class AnimalUpdate(SQLModel):
-    """Represents parameters for updating an animal in the system."""
+    """Request model for updating animal in the system."""
 
     name: str = None
     age: int = None
     kind: str = None
     fixed: bool = None
     vaccinated: bool = None
+    adopter_id: Optional[int]
+    adoption_date: Optional[date]
 
 
-# ----- response models ----- #
+class UserCreate(SQLModel):
+    """Request model for adding new user to the system."""
+
+    id: str
+    username: str
+    email: str
+    password: str
+
+
+class UserUpdate(SQLModel):
+    """Request model for updating user in the system."""
+
+    username: str = None
+    email: str = None
+    password: str = None
+
+
+# ------------------------------------- #
+#            response models            #
+# ------------------------------------- #
+
+class Metadata(BaseModel):
+    """Represents metadata for a collection."""
+
+    count: int
+
 
 class Animal(SQLModel):
-    """Data model for an animal."""
+    """Data model for animal."""
+
     id: int
     name: str
     age: int
@@ -62,55 +112,35 @@ class Animal(SQLModel):
 
 
 class AnimalResponse(BaseModel):
-    """Represents an API response for an animal."""
+    """API response for animal."""
 
     animal: Animal
 
 
 class AnimalCollection(BaseModel):
-    """Represents an API response for a collection of animals."""
+    """API response for a collection of animals."""
 
     meta: Metadata
     animals: list[Animal]
 
 
-# ---------- users ---------- #
-
-
-class UserInDB(BaseModel):
-    """Represents a user in the database."""
+class User(SQLModel):
+    """Data model for user."""
 
     id: str
-    name: str
+    username: str
     email: str
     created_at: datetime
 
 
-class User(BaseModel):
-    """Represents an API response for a user."""
+class UserResponse(BaseModel):
+    """API response for user."""
 
-    id: str
-    name: str
-    created_at: datetime
-
-
-class UserCreate(BaseModel):
-    """Represents parameters for adding a new user to the system."""
-
-    id: str
-    email: str
-
-
-class UserUpdate(BaseModel):
-    """Represents parameters for updating a user in the system."""
-
-    id: str = None
-    email: str = None
-
+    user: User
 
 
 class UserCollection(BaseModel):
-    """Represents an API response for a collection of users."""
+    """API response for a collection of users."""
 
     meta: Metadata
     users: list[User]
