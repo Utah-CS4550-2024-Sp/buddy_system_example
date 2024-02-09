@@ -81,10 +81,6 @@ function AnimalListContainer() {
 }
 
 function AnimalCardQueryContainer({ animalId }) {
-  if (!animalId) {
-    return <h2>pick an animal</h2>;
-  }
-
   const { data } = useQuery({
     queryKey: ["animals", animalId],
     queryFn: () => (
@@ -105,7 +101,7 @@ function Animals() {
   return (
     <div className="animals-page">
       <AnimalListContainer />
-      <AnimalCardQueryContainer animalId={animalId} />
+      {animalId ? <AnimalCardQueryContainer animalId={animalId} /> : <h2>pick an animal</h2>}
     </div>
   );
 }

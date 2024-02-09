@@ -1,143 +1,175 @@
 from datetime import date
 
+import pytest
 from fastapi.testclient import TestClient
+from sqlmodel import Session, SQLModel, create_engine
+from sqlmodel.pool import StaticPool
 
+from backend import database as db
+from backend.entities import AnimalInDB
 from backend.main import app
 
 
-def test_get_all_animals():
-    client = TestClient(app)
+@pytest.fixture
+def session():
+    engine = create_engine(
+        "sqlite://",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    SQLModel.metadata.create_all(engine)
+    with Session(engine) as session:
+        yield session
+
+
+@pytest.fixture
+def client(session):
+    def _get_session_override():
+        return session
+
+    app.dependency_overrides[db.get_session] = _get_session_override
+
+    yield TestClient(app)
+
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def default_animals():
+    return [
+        AnimalInDB(name="chompers", age=2, kind="cat", fixed=True, vaccinated=False, intake_date=date.fromisoformat("2021-05-05")),
+        AnimalInDB(name="paperclip", age=5, kind="dog", fixed=False, vaccinated=True, intake_date=date.fromisoformat("2020-02-02")),
+        AnimalInDB(name="bagels", age=99, kind="turtle", fixed=True, vaccinated=True, intake_date=date.fromisoformat("2023-11-23")),
+    ]
+
+
+def test_get_all_animals(client, session, default_animals):
+    expected_names = ["bagels", "chompers", "paperclip"]  # sorted by name
+    session.add_all(default_animals)
+    session.commit()
+
     response = client.get("/animals")
     assert response.status_code == 200
 
     meta = response.json()["meta"]
     animals = response.json()["animals"]
-    assert meta["count"] == len(animals)
-    assert animals == sorted(animals, key=lambda animal: animal["name"])
+
+    assert meta["count"] == len(default_animals)
+    assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_get_all_animals_sorted_by_age():
-    client = TestClient(app)
+def test_get_all_animals_sorted_by_age(client, session, default_animals):
+    expected_names = ["chompers", "paperclip", "bagels"]  # sorted by age
+    session.add_all(default_animals)
+    session.commit()
+
     response = client.get("/animals?sort=age")
     assert response.status_code == 200
 
     meta = response.json()["meta"]
     animals = response.json()["animals"]
-    assert meta["count"] == len(animals)
-    assert animals == sorted(animals, key=lambda animal: animal["age"])
+
+    assert meta["count"] == len(default_animals)
+    assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_get_all_animals_sorted_by_intake_date():
-    client = TestClient(app)
+def test_get_all_animals_sorted_by_intake_date(client, session, default_animals):
+    expected_names = ["paperclip", "chompers", "bagels"]  # sorted by intake date
+    session.add_all(default_animals)
+    session.commit()
+
     response = client.get("/animals?sort=intake_date")
     assert response.status_code == 200
 
     meta = response.json()["meta"]
     animals = response.json()["animals"]
-    assert meta["count"] == len(animals)
-    assert animals == sorted(
-        animals,
-        key=lambda animal: date.fromisoformat(animal["intake_date"]),
-    )
-    # date ISO format: yyyy-mm-dd
-    # datetime ISO format: yyyy-mm-ddThh:mm:ss
+
+    assert meta["count"] == len(default_animals)
+    assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_get_all_animals_after_date():
-    client = TestClient(app)
-    response = client.get("/animals?intake_after=2023-05-10")
+def test_get_all_animals_after_date(client, session, default_animals):
+    expected_names = ["bagels", "chompers"]  # sorted by age, filtered for intake after 2021-01-01
+    session.add_all(default_animals)
+    session.commit()
+
+    response = client.get("/animals?intake_after=2021-01-01")
     assert response.status_code == 200
 
     meta = response.json()["meta"]
     animals = response.json()["animals"]
-    assert meta["count"] == len(animals)
 
-    lower_bound = date(2023, 5, 10)
-    for animal in animals:
-        intake_date = date.fromisoformat(animal["intake_date"])
-        assert intake_date >= lower_bound
+    assert meta["count"] == len(expected_names)
+    assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_get_all_animals_before_date():
-    client = TestClient(app)
-    response = client.get("/animals?intake_before=2023-05-10")
+def test_get_all_animals_before_date(client, session, default_animals):
+    expected_names = ["chompers", "paperclip"]  # sorted by age, filtered for intake before 2022-12-31
+    session.add_all(default_animals)
+    session.commit()
+
+    response = client.get("/animals?intake_before=2022-12-31")
     assert response.status_code == 200
 
     meta = response.json()["meta"]
     animals = response.json()["animals"]
-    assert meta["count"] == len(animals)
 
-    upper_bound = date(2023, 5, 10)
-    for animal in animals:
-        intake_date = date.fromisoformat(animal["intake_date"])
-        assert intake_date <= upper_bound
+    assert meta["count"] == len(expected_names)
+    assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_get_all_animals_between_dates():
-    client = TestClient(app)
-    response = client.get("/animals?intake_after=2022-05-10&intake_before=2023-02-25")
+def test_get_all_animals_between_dates(client, session, default_animals):
+    expected_names = ["chompers"]  # filterd for intake in 2021 or 2022
+    session.add_all(default_animals)
+    session.commit()
+
+    response = client.get("/animals?intake_after=2021-01-01&intake_before=2022-12-31")
     assert response.status_code == 200
 
     meta = response.json()["meta"]
     animals = response.json()["animals"]
-    assert meta["count"] == len(animals)
 
-    lower_bound = date(2022, 5, 10)
-    upper_bound = date(2023, 2, 25)
-    for animal in animals:
-        intake_date = date.fromisoformat(animal["intake_date"])
-        assert lower_bound <= intake_date <= upper_bound
+    assert meta["count"] == len(expected_names)
+    assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_create_animal():
+def test_create_animal(client, session):
     create_params = {
         "name": "karl barx",
         "age": 3,
         "kind": "dog",
     }
-    client = TestClient(app)
     response = client.post("/animals", json=create_params)
 
     assert response.status_code == 200
-    # old thing
-    # animal = response.json()
-    # new thing
-    # animal = resposne.json()["animal"]
     data = response.json()
     assert "animal" in data
     animal = data["animal"]
     for key, value in create_params.items():
         assert animal[key] == value
+    assert animal["intake_date"] == date.today().isoformat()
 
-    response = client.get(f"/animals/{animal['id']}")
-    assert response.status_code == 200
-    data = response.json()
-    assert "animal" in data
-    animal = data["animal"]
-    for key, value in create_params.items():
-        assert animal[key] == value
+    # test that new animal is persisted
+    assert session.get(AnimalInDB, animal["id"]) is not None
 
 
-def test_get_animal():
-    animal_id = "75ada30d3f504c9682683c3b6fad4bff"
-    expected_animal = {
-        "id": animal_id,
-        "name": "nibbles",
-        "age": 2,
-        "kind": "cat",
-        "fixed": False,
-        "vaccinated": False,
-        "intake_date": "2023-12-10",
-    }
-    client = TestClient(app)
+def test_get_animal(client, session, default_animals):
+    db_animal = default_animals[0]
+    session.add(db_animal)
+    session.commit()
+
+    animal_id = db_animal.id
     response = client.get(f"/animals/{animal_id}")
     assert response.status_code == 200
-    assert response.json() == {"animal": expected_animal}
+
+    animal = response.json()["animal"]
+    expected_animal = db_animal.model_dump(mode="json")
+    for key, value in animal.items():
+        assert value == expected_animal[key]
 
 
-def test_get_animal_invalid_id():
-    animal_id = "abcdefghijklmnopqrstrv1234567890"
-    client = TestClient(app)
+def test_get_animal_invalid_id(client):
+    animal_id = 999
     response = client.get(f"/animals/{animal_id}")
     assert response.status_code == 404
     assert response.json() == {
@@ -149,36 +181,35 @@ def test_get_animal_invalid_id():
     }
 
 
-def test_update_animal_name_age():
-    animal_id = "75ada30d3f504c9682683c3b6fad4bff"
-    update_params = {"name": "nibbles, jr", "age": 3}
-    expected_animal = {
-        "id": animal_id,
-        "name": update_params["name"],
-        "age": update_params["age"],
-        "kind": "cat",
-        "fixed": False,
-        "vaccinated": False,
-        "intake_date": "2023-12-10",
-    }
-    client = TestClient(app)
-    response = client.put(f"/animals/{animal_id}", json=update_params)
+def test_update_animal_name_age(client, session, default_animals):
+    db_animal = default_animals[0]
+    session.add(db_animal)
+    session.commit()
+
+    update_params = {"name": "nibbles", "age": 15}
+    response = client.put(f"/animals/{db_animal.id}", json=update_params)
     assert response.status_code == 200
-    assert response.json() == {"animal": expected_animal}
 
-    # test that the update is persisted
-    response = client.get(f"/animals/{animal_id}")
-    assert response.status_code == 200
-    assert response.json() == {"animal": expected_animal}
+    animal = response.json()["animal"]
+    old_animal = db_animal.model_dump(mode="json")
+    for key, value in animal.items():
+        if key in update_params:
+            assert value == update_params[key]
+        else:
+            assert value == old_animal[key]
+
+    # test that updates are persisted
+    session.refresh(db_animal)
+    for key, value in update_params.items():
+        assert value == getattr(db_animal, key)
 
 
-def test_update_animal_invalid_id():
-    animal_id = "invalid_id"
+def test_update_animal_invalid_id(client):
+    animal_id = 999
     update_params = {
         "name": "updated name",
         "age": 100,
     }
-    client = TestClient(app)
     response = client.put(f"/animals/{animal_id}", json=update_params)
     assert response.status_code == 404
     assert response.json() == {
@@ -190,28 +221,21 @@ def test_update_animal_invalid_id():
     }
 
 
-def test_delete_animal():
-    animal_id = "75ada30d3f504c9682683c3b6fad4bff"
-    client = TestClient(app)
-    response = client.delete(f"/animals/{animal_id}")
+def test_delete_animal(client, session, default_animals):
+    db_animal = default_animals[0]
+    session.add(db_animal)
+    session.commit()
+
+    response = client.delete(f"/animals/{db_animal.id}")
     assert response.status_code == 204
     assert response.content == b""
 
     # test that the delete is persisted
-    response = client.get(f"/animals/{animal_id}")
-    assert response.status_code == 404
-    assert response.json() == {
-        "detail": {
-            "type": "entity_not_found",
-            "entity_name": "Animal",
-            "entity_id": animal_id,
-        },
-    }
+    assert session.get(AnimalInDB, db_animal.id) is None
 
 
-def test_delete_animal_invalid_id():
-    animal_id = "invalid_id"
-    client = TestClient(app)
+def test_delete_animal_invalid_id(client):
+    animal_id = 999
     response = client.delete(f"/animals/{animal_id}")
     assert response.status_code == 404
     assert response.json() == {

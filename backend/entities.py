@@ -2,12 +2,21 @@ from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, Relationship, SQLModel
 
 
 # ------------------------------------- #
 #            database models            #
 # ------------------------------------- #
+
+class FosterInDB(SQLModel, table=True):
+    __tablename__ = "fosters"
+
+    user_id: int = Field(primary_key=True, foreign_key="users.id")
+    animal_id: int = Field(primary_key=True, foreign_key="animals.id")
+    start_date: date
+    end_date: date
+
 
 class AnimalInDB(SQLModel, table=True):
     """Database model for animal."""
@@ -24,6 +33,9 @@ class AnimalInDB(SQLModel, table=True):
     adopter_id: Optional[int] = Field(default=None, foreign_key="users.id")
     adoption_date: Optional[date] = Field(default=None)
 
+    adopter: Optional["UserInDB"] = Relationship()
+    foster_users: list["UserInDB"] = Relationship(link_model=FosterInDB)
+
 
 class UserInDB(SQLModel, table=True):
     """Database model for user."""
@@ -36,14 +48,8 @@ class UserInDB(SQLModel, table=True):
     hashed_password: str
     created_at: Optional[datetime] = Field(default_factory=datetime.now)
 
-
-class FosterInDB(SQLModel, table=True):
-    __tablename__ = "fosters"
-
-    user_id: int = Field(primary_key=True, foreign_key="users.id")
-    animal_id: int = Field(primary_key=True, foreign_key="animals.id")
-    start_date: date
-    end_date: date
+    pets: list[AnimalInDB] = Relationship()
+    foster_animals: list[AnimalInDB] = Relationship(link_model=FosterInDB)
 
 
 # ------------------------------------- #
@@ -68,8 +74,8 @@ class AnimalUpdate(SQLModel):
     kind: str = None
     fixed: bool = None
     vaccinated: bool = None
-    adopter_id: Optional[int]
-    adoption_date: Optional[date]
+    adopter_id: Optional[int] = None
+    adoption_date: Optional[date] = None
 
 
 class UserCreate(SQLModel):
