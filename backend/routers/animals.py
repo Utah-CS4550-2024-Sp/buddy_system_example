@@ -62,7 +62,7 @@ def get_animal(
 
 @animals_router.put("/{animal_id}", response_model=AnimalResponse)
 def update_animal(
-    animal_id: str,
+    animal_id: int,
     animal_update: AnimalUpdate,
     session: Session = Depends(db.get_session),
 ):
