@@ -5,7 +5,6 @@ from backend.entities import (
     AnimalCreate,
     AnimalUpdate,
     UserInDB,
-    UserCreate,
     UserUpdate,
 )
 
@@ -124,21 +123,6 @@ def get_all_users(session: Session) -> list[UserInDB]:
     return session.exec(select(UserInDB)).all()
 
 
-def create_user(session: Session, user_create: UserCreate) -> UserInDB:
-    """
-    Create a new user in the database.
-
-    :param user_create: attributes of the user to be created
-    :return: the newly created user
-    """
-
-    user = UserInDB(**user_create.model_dump())
-    session.add(user)
-    session.commit()
-    session.refresh(user)
-    return user
-
-
 def get_user_by_id(session: Session, user_id: int) -> UserInDB:
     """
     Retrieve an user from the database.
@@ -163,7 +147,7 @@ def update_user(session: Session, user_id: int, user_update: UserUpdate) -> User
     :return: the updated user
     """
 
-    user = get_user_by_id(user_id)
+    user = get_user_by_id(session, user_id)
     for key, value in user_update.update_attributes().items():
         setattr(user, key, value)
     session.add(user)
@@ -179,6 +163,6 @@ def delete_user(session: Session, user_id: int):
     :param user_id: the id of the user to be deleted
     """
 
-    user = get_user_by_id(user_id)
+    user = get_user_by_id(session, user_id)
     session.delete(user)
     session.commit()

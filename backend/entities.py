@@ -33,8 +33,8 @@ class AnimalInDB(SQLModel, table=True):
     adopter_id: Optional[int] = Field(default=None, foreign_key="users.id")
     adoption_date: Optional[date] = Field(default=None)
 
-    adopter: Optional["UserInDB"] = Relationship()
-    foster_users: list["UserInDB"] = Relationship(link_model=FosterInDB)
+    adopter: Optional["UserInDB"] = Relationship(back_populates="pets")
+    foster_users: list["UserInDB"] = Relationship(back_populates="foster_animals", link_model=FosterInDB)
 
 
 class UserInDB(SQLModel, table=True):
@@ -48,8 +48,8 @@ class UserInDB(SQLModel, table=True):
     hashed_password: str
     created_at: Optional[datetime] = Field(default_factory=datetime.now)
 
-    pets: list[AnimalInDB] = Relationship()
-    foster_animals: list[AnimalInDB] = Relationship(link_model=FosterInDB)
+    pets: list[AnimalInDB] = Relationship(back_populates="adopter")
+    foster_animals: list[AnimalInDB] = Relationship(back_populates="foster_users", link_model=FosterInDB)
 
 
 # ------------------------------------- #
@@ -76,15 +76,6 @@ class AnimalUpdate(SQLModel):
     vaccinated: bool = None
     adopter_id: Optional[int] = None
     adoption_date: Optional[date] = None
-
-
-class UserCreate(SQLModel):
-    """Request model for adding new user to the system."""
-
-    id: str
-    username: str
-    email: str
-    password: str
 
 
 class UserUpdate(SQLModel):
@@ -133,7 +124,7 @@ class AnimalCollection(BaseModel):
 class User(SQLModel):
     """Data model for user."""
 
-    id: str
+    id: int
     username: str
     email: str
     created_at: datetime
