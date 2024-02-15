@@ -36,6 +36,7 @@ with Session(engine) as session:
             }
         )
         for user_data in DB["users"].values()
+        if user_data["id"] != "juniper"
     ]
 
     session.add_all(animals)
