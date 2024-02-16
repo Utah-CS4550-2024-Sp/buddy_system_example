@@ -43,7 +43,7 @@ class UserInDB(SQLModel, table=True):
     __tablename__ = "users"
 
     id: int = Field(default=None, primary_key=True)
-    username: str = Field(unique=True)
+    username: str = Field(unique=True, index=True)
     email: str
     hashed_password: str
     created_at: Optional[datetime] = Field(default_factory=datetime.now)

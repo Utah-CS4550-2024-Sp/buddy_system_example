@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
 from backend import database as db
-from backend.entities import AnimalCollection, UserCollection, UserResponse
+from backend.auth import get_current_user
+from backend.entities import AnimalCollection, UserInDB, UserCollection, UserResponse
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -16,8 +17,14 @@ def get_users(session: Session = Depends(db.get_session)):
     )
 
 
+@users_router.get("/me", response_model=UserResponse)
+def get_self(user: UserInDB = Depends(get_current_user)):
+    """Get current user."""
+    return UserResponse(user=user)
+
+
 @users_router.get("/{user_id}", response_model=UserResponse)
-def get_user(user_id: str, session: Session = Depends(db.get_session)):
+def get_user(user_id: int, session: Session = Depends(db.get_session)):
     return UserResponse(
         user=db.get_user_by_id(session, user_id),
     )
