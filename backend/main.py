@@ -4,6 +4,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, HTMLResponse
 
+from backend.auth import auth_router
 from backend.routers.animals import animals_router
 from backend.routers.users import users_router
 from backend.database import create_db_and_tables, EntityNotFoundException
@@ -22,6 +23,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+app.include_router(auth_router)
 app.include_router(animals_router)
 app.include_router(users_router)
 
