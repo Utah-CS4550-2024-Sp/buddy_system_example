@@ -125,7 +125,7 @@ def get_all_users(session: Session) -> list[UserInDB]:
 
 def get_user_by_id(session: Session, user_id: int) -> UserInDB:
     """
-    Retrieve an user from the database.
+    Retrieve a user from the database.
 
     :param user_id: id of the user to be retrieved
     :return: the retrieved user
@@ -140,7 +140,7 @@ def get_user_by_id(session: Session, user_id: int) -> UserInDB:
 
 def update_user(session: Session, user_id: int, user_update: UserUpdate) -> UserInDB:
     """
-    Update an user in the database.
+    Update a user in the database.
 
     :param user_id: id of the user to be updated
     :param user_update: attributes to be updated on the user
@@ -158,7 +158,7 @@ def update_user(session: Session, user_id: int, user_update: UserUpdate) -> User
 
 def delete_user(session: Session, user_id: int):
     """
-    Delete an user from the database.
+    Delete a user from the database.
 
     :param user_id: the id of the user to be deleted
     """

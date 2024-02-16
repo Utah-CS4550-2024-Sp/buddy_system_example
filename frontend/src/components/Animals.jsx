@@ -81,15 +81,13 @@ function AnimalListContainer() {
 }
 
 function AnimalCardQueryContainer({ animalId }) {
-  if (!animalId) {
-    return <h2>pick an animal</h2>
-  }
   const { data } = useQuery({
     queryKey: ["animals", animalId],
     queryFn: () => (
       fetch(`http://127.0.0.1:8000/animals/${animalId}`)
         .then((response) => response.json())
     ),
+    enabled: animalId !== undefined,
   });
 
   if (data && data.animal) {

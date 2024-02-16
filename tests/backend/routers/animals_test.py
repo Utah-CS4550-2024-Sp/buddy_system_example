@@ -1,45 +1,41 @@
 from datetime import date
 
 import pytest
-from fastapi.testclient import TestClient
-from sqlmodel import Session, SQLModel, create_engine
-from sqlmodel.pool import StaticPool
 
 from backend import database as db
 from backend.entities import AnimalInDB
-from backend.main import app
-
-
-@pytest.fixture
-def session():
-    engine = create_engine(
-        "sqlite://",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
-    )
-    SQLModel.metadata.create_all(engine)
-    with Session(engine) as session:
-        yield session
-
-
-@pytest.fixture
-def client(session):
-    def _get_session_override():
-        return session
-
-    app.dependency_overrides[db.get_session] = _get_session_override
-
-    yield TestClient(app)
-
-    app.dependency_overrides.clear()
 
 
 @pytest.fixture
 def default_animals():
     return [
-        AnimalInDB(name="chompers", age=2, kind="cat", fixed=True, vaccinated=False, intake_date=date.fromisoformat("2021-05-05")),
-        AnimalInDB(name="paperclip", age=5, kind="dog", fixed=False, vaccinated=True, intake_date=date.fromisoformat("2020-02-02")),
-        AnimalInDB(name="bagels", age=99, kind="turtle", fixed=True, vaccinated=True, intake_date=date.fromisoformat("2023-11-23")),
+        AnimalInDB(
+            id=1,
+            name="chompers",
+            age=2,
+            kind="cat",
+            fixed=True,
+            vaccinated=False,
+            intake_date=date.fromisoformat("2021-05-05"),
+        ),
+        AnimalInDB(
+            id=2,
+            name="paperclip",
+            age=5,
+            kind="dog",
+            fixed=False,
+            vaccinated=True,
+            intake_date=date.fromisoformat("2020-02-02"),
+        ),
+        AnimalInDB(
+            id=3,
+            name="bagels",
+            age=99,
+            kind="turtle",
+            fixed=True,
+            vaccinated=True,
+            intake_date=date.fromisoformat("2023-11-23"),
+        ),
     ]
 
 

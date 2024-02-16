@@ -49,7 +49,7 @@ class UserInDB(SQLModel, table=True):
     created_at: Optional[datetime] = Field(default_factory=datetime.now)
 
     pets: list[AnimalInDB] = Relationship(back_populates="adopter")
-    foster_animals: list[AnimalInDB] = Relationship(back_populates="foster_users", link_model=FosterInDB)
+    foster_animals: list[AnimalInDB] = Relationship(back_populates="foster_users" ,link_model=FosterInDB)
 
 
 # ------------------------------------- #
