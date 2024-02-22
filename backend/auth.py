@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timezone
+from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import (
@@ -93,7 +94,8 @@ def get_current_user(
 @auth_router.post("/registration", response_model=User)
 def register_new_user(
     registration: UserRegistration,
-    session: Session = Depends(db.get_session),
+    # session: Session = Depends(db.get_session),
+    session: Annotated[Session, Depends(db.get_session)],
 ):
     """Register new user."""
 

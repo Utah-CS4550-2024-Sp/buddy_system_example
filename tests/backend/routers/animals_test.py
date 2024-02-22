@@ -39,10 +39,12 @@ def default_animals():
     ]
 
 
-def test_get_all_animals(client, session, default_animals):
+def test_get_all_animals(client, animal_fixture):
+    db_animals = [
+        animal_fixture(name=name)
+        for name in ["chompers", "bagels", "paperclip"]
+    ]
     expected_names = ["bagels", "chompers", "paperclip"]  # sorted by name
-    session.add_all(default_animals)
-    session.commit()
 
     response = client.get("/animals")
     assert response.status_code == 200
@@ -50,14 +52,20 @@ def test_get_all_animals(client, session, default_animals):
     meta = response.json()["meta"]
     animals = response.json()["animals"]
 
-    assert meta["count"] == len(default_animals)
+    assert meta["count"] == len(db_animals)
     assert [animal["name"] for animal in animals] == expected_names
 
 
-def test_get_all_animals_sorted_by_age(client, session, default_animals):
+def test_get_all_animals_sorted_by_age(client, animal_fixture):
+    db_animals = [
+        animal_fixture(name=name, age=age)
+        for name, age in [
+            ("paperclip", 5),
+            ("bagels", 7),
+            ("chompers", 2),
+        ]
+    ]
     expected_names = ["chompers", "paperclip", "bagels"]  # sorted by age
-    session.add_all(default_animals)
-    session.commit()
 
     response = client.get("/animals?sort=age")
     assert response.status_code == 200
@@ -65,7 +73,7 @@ def test_get_all_animals_sorted_by_age(client, session, default_animals):
     meta = response.json()["meta"]
     animals = response.json()["animals"]
 
-    assert meta["count"] == len(default_animals)
+    assert meta["count"] == len(db_animals)
     assert [animal["name"] for animal in animals] == expected_names
 
 
