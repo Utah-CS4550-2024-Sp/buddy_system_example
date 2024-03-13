@@ -70,3 +70,11 @@ def default() -> str:
         </html>
         """,
     )
+
+
+@app.get("/greet")
+def greet():
+    """Greet a collection of people."""
+    greeting = "hello to nobody"
+    return {"greeting": greeting}
+

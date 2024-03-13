@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import pytest
 from fastapi.testclient import TestClient
@@ -57,7 +57,7 @@ def animal_fixture(session):
         kind: str = "cat",
         fixed: bool = True,
         vaccinated: bool = True,
-        created_at: datetime = datetime.now(),
+        intake_date: date = date.today(),
     ) -> db.AnimalInDB:
         animal = db.AnimalInDB(
             name=name,
@@ -65,7 +65,7 @@ def animal_fixture(session):
             kind=kind,
             fixed=fixed,
             vaccinated=vaccinated,
-            created_at=created_at,
+            intake_date=intake_date,
         )
 
         session.add(animal)
@@ -94,3 +94,41 @@ def user_fixture(session):
         )
 
     return _build_user
+
+
+@pytest.fixture
+def add_foster_relation(session):
+    def _build_foster(
+        user: db.UserInDB,
+        animal: db.AnimalInDB,
+        start_date: date = date(2024, 1, 15),
+        end_date: date = date(2024, 2, 10),
+    ) -> db.FosterInDB:
+        foster = db.FosterInDB(
+            user_id=user.id,
+            animal_id=animal.id,
+            start_date=start_date,
+            end_date=end_date,
+        )
+        session.add(foster)
+        session.commit()
+        session.refresh(foster)
+        return foster
+
+    return _build_foster
+
+
+@pytest.fixture
+def add_adoption_relation(session):
+    def _add_adoption(
+        user: db.UserInDB,
+        animal: db.AnimalInDB,
+        adoption_date: date = date.today(),
+    ):
+        animal.adopter_id = user.id
+        animal.adoption_date = adoption_date
+        session.add(animal)
+        session.commit()
+        session.refresh(animal)
+
+    return _add_adoption

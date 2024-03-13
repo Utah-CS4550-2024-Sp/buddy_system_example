@@ -1,7 +1,9 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, NavLink, Navigate, Routes, Route } from 'react-router-dom';
 import Animals from './components/Animals';
-import './App.css'
+import Counter from "./components/Counter";
+import LeftNav from "./components/LeftNav";
+import TopNav from "./components/TopNav";
 
 const queryClient = new QueryClient();
 
@@ -13,13 +15,21 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Animals />} />
-          <Route path="/animals" element={<Animals />} />
-          <Route path="/animals/:animalId" element={<Animals />} />
-          <Route path="/error/404" element={<NotFound />} />
-          <Route path="*" element={<Navigate to="/error/404" />} />
-        </Routes>
+        <div className="h-screen max-h-screen max-w-2xl mx-auto bg-gray-700 text-white flex flex-col">
+          <header>
+            <TopNav />
+          </header>
+          <main className="max-h-main">
+            <Routes>
+              <Route path="/" element={<></>} />
+              <Route path="/animals" element={<Animals />} />
+              <Route path="/animals/:animalId" element={<Animals />} />
+              <Route path="/counter" element={<Counter />} />
+              <Route path="/error/404" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/error/404" />} />
+            </Routes>
+          </main>
+        </div>
       </BrowserRouter>
     </QueryClientProvider>
   );

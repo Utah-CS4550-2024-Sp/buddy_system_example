@@ -106,6 +106,8 @@ class Animal(SQLModel):
     fixed: bool
     vaccinated: bool
     intake_date: date
+    adopter_id: Optional[int]
+    adoption_date: Optional[date]
 
 
 class AnimalResponse(BaseModel):
@@ -136,8 +138,28 @@ class UserResponse(BaseModel):
     user: User
 
 
+class EnhancedUserResponse(UserResponse):
+    """API response for user with additional optional fields."""
+
+    pets: Optional[list[AnimalInDB]] = None
+    fosters: Optional[list[AnimalInDB]] = None
+
+
 class UserCollection(BaseModel):
     """API response for a collection of users."""
 
     meta: Metadata
     users: list[User]
+
+
+class Foster(BaseModel):
+    animal: Animal
+    user: User
+    start_date: date
+    end_date: date
+
+
+class FosterCollection(BaseModel):
+    meta: Metadata
+    fosters: list[Foster]
+

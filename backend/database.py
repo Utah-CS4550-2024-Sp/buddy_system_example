@@ -1,11 +1,14 @@
+from sqlalchemy import func
 from sqlmodel import Session, SQLModel, create_engine, select
 
 from backend.entities import (
     AnimalInDB,
     AnimalCreate,
     AnimalUpdate,
+    FosterInDB,
     UserInDB,
     UserUpdate,
+    Foster,
 )
 
 engine = create_engine(
@@ -110,6 +113,36 @@ def delete_animal(session: Session, animal_id: int):
     session.commit()
 
 
+def get_foster_count(session: Session, user_id: int) -> int:
+    statement = select(
+        func(count(FosterInDB.id))
+    ).where(FosterInDB.user_id == user_id)
+    return session.scalar(statement)
+
+
+def get_fosters(session: Session, user_id: int) -> list[Foster]:
+    user = get_user_by_id(session, user_id)
+    statement = select(
+        FosterInDB,
+        AnimalInDB,
+    ).join(
+        AnimalInDB,
+        FosterInDB.animal_id == AnimalInDB.id,
+    ).where(
+        FosterInDB.user_id == user_id
+    )
+    results = session.exec(statement).all()
+    return [
+        Foster(
+            animal=animal,
+            user=user,
+            start_date=foster.start_date,
+            end_date=foster.end_date,
+        )
+        for foster, animal in results
+    ]
+
+
 #   -------- users --------   #
 
 
@@ -166,3 +199,4 @@ def delete_user(session: Session, user_id: int):
     user = get_user_by_id(session, user_id)
     session.delete(user)
     session.commit()
+

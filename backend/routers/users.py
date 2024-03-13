@@ -1,9 +1,16 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session
 
 from backend import database as db
 from backend.auth import get_current_user
-from backend.entities import AnimalCollection, UserInDB, UserCollection, UserResponse
+from backend.entities import (
+    AnimalCollection,
+    UserInDB,
+    UserCollection,
+    UserResponse,
+    EnhancedUserResponse,
+    FosterCollection,
+)
 
 users_router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -24,10 +31,12 @@ def get_self(user: UserInDB = Depends(get_current_user)):
 
 
 @users_router.get("/{user_id}", response_model=UserResponse)
-def get_user(user_id: int, session: Session = Depends(db.get_session)):
-    return UserResponse(
-        user=db.get_user_by_id(session, user_id),
-    )
+def get_user(
+    user_id: int,
+    session: Session = Depends(db.get_session),
+):
+    user = db.get_user_by_id(session, user_id)
+    return UserResponse(user=user)
 
 
 @users_router.delete("/{user_id}", status_code=204)
@@ -35,16 +44,20 @@ def delete_user(user_id: str, session: Session = Depends(db.get_session)):
     db.delete_user(session, user_id)
 
 
-@users_router.get("/{user_id}/fosters", response_model=AnimalCollection)
+@users_router.get("/{user_id}/fosters", response_model=FosterCollection)
 def get_user_fosters(user_id: str, session: Session = Depends(db.get_session)):
-    user = db.get_user_by_id(session, user_id)
-    foster_animals = user.foster_animals
-    return AnimalCollection(
-        meta={"count": len(foster_animals)},
-        animals=foster_animals,
+    fosters = db.get_fosters(session, user_id)
+    return FosterCollection(
+        meta={"count": len(fosters)},
+        fosters=fosters,
     )
 
 
-@users_router.get("/{user_id}/adoptions")
-def get_user_adoptions(user_id: str):
-    pass
+@users_router.get("/{user_id}/pets")
+def get_user_pets(user_id: str, session: Session = Depends(db.get_session)):
+    user = db.get_user_by_id(session, user_id)
+    pets = user.pets
+    return AnimalCollection(
+        meta={"count": len(pets)},
+        animals=pets,
+    )
