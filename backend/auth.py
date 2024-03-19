@@ -82,6 +82,19 @@ class ExpiredToken(AuthException):
         )
 
 
+class DuplicateValueException(HTTPException):
+    def __init__(self, field: str, value: str):
+        super().__init__(
+            status_code=422,
+            detail={
+                "type": "duplicate_value",
+                "entity_name": "User",
+                "entity_field": field,
+                "entity_field_value": value,
+            },
+        )
+
+
 def get_current_user(
     session: Session = Depends(db.get_session),
     token: str = Depends(oauth2_scheme),
@@ -98,6 +111,19 @@ def register_new_user(
     session: Annotated[Session, Depends(db.get_session)],
 ):
     """Register new user."""
+
+    for field in ["username", "email"]:
+        if (
+            session.exec(
+                select(UserInDB.id).where(
+                    getattr(UserInDB, field) == getattr(registration, field)
+                )
+            ).first()
+        ):
+            raise DuplicateValueException(
+                field=field,
+                value=getattr(registration, field),
+            )
 
     hashed_password = pwd_context.hash(registration.password)
     user = UserInDB(
