@@ -1,10 +1,13 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, NavLink, Navigate, Routes, Route } from 'react-router-dom';
 import { AuthProvider, useAuth } from "./context/auth";
+import { UserProvider } from "./context/user";
 import Animals from './components/Animals';
 import Counter from "./components/Counter";
 import LeftNav from "./components/LeftNav";
 import Login from "./components/Login";
+import Profile from "./components/Profile";
+import Registration from "./components/Registration";
 import TopNav from "./components/TopNav";
 
 const queryClient = new QueryClient();
@@ -21,14 +24,6 @@ function Home() {
       <div className="py-2">
         logged in: {isLoggedIn.toString()}
       </div>
-      {isLoggedIn &&
-        <button
-          className="my-2 p-2 border rounded hover:bg-slate-800"
-          onClick={logout}
-        >
-          logout
-        </button>
-      }
     </div>
   );
 }
@@ -41,18 +36,40 @@ function Header() {
   );
 }
 
+function AuthenticatedRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/animals" element={<Animals />} />
+      <Route path="/animals/:animalId" element={<Animals />} />
+      <Route path="/counter" element={<Counter />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/error/404" element={<NotFound />} />
+      <Route path="*" element={<Navigate to="/error/404" />} />
+    </Routes>
+  );
+}
+
+function UnauthenticatedRoutes() {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/registration" element={<Registration />} />
+      <Route path="*" element={<Navigate to="/login" />} />
+    </Routes>
+  );
+}
+
 function Main() {
+  const { isLoggedIn } = useAuth();
+
   return (
     <main className="max-h-main">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/animals" element={<Animals />} />
-        <Route path="/animals/:animalId" element={<Animals />} />
-        <Route path="/counter" element={<Counter />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/error/404" element={<NotFound />} />
-        <Route path="*" element={<Navigate to="/error/404" />} />
-      </Routes>
+      {isLoggedIn ?
+        <AuthenticatedRoutes /> :
+        <UnauthenticatedRoutes />
+      }
     </main>
   );
 }
@@ -69,10 +86,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <BrowserRouter>
-          <div className={className}>
-            <Header />
-            <Main />
-          </div>
+          <UserProvider>
+            <div className={className}>
+              <Header />
+              <Main />
+            </div>
+          </UserProvider>
         </BrowserRouter>
       </AuthProvider>
     </QueryClientProvider>

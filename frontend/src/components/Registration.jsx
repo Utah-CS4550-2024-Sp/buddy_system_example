@@ -15,51 +15,49 @@ function Error({ message }) {
   );
 }
 
-function RegistrationLink() {
+function LoginLink() {
   return (
     <div className="pt-8 flex flex-col">
       <div className="text-xs">
-        need an account?
+        already have an account?
       </div>
-      <Link to="/registration">
+      <Link to="/login">
         <Button className="mt-1 w-full">
-          register
+          login
         </Button>
       </Link>
     </div>
   );
 }
 
-function Login() {
+function Registration() {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
-  const { login } = useAuth();
-
-  const disabled = username === "" || password === "";
+  const disabled = username === "" || email === "" || password === "";
 
   const onSubmit = (e) => {
     e.preventDefault();
 
     fetch(
-      "http://127.0.0.1:8000/auth/token",
+      "http://127.0.0.1:8000/auth/registration",
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          "Content-Type": "application/json",
         },
-        body: new URLSearchParams({ username, password }),
+        body: JSON.stringify({ username, email, password }),
       },
     ).then((response) => {
       if (response.ok) {
-        response.json().then(login);
-        navigate("/");
-      } else if (response.status === 401) {
+        navigate("/login");
+      } else if (response.status === 422) {
         response.json().then((data) => {
-          setError(data.detail.error_description);
+          setError(data.detail.entity_field + " already taken");
         });
       } else {
         setError("error logging in");
@@ -71,16 +69,17 @@ function Login() {
     <div className="max-w-96 mx-auto py-8 px-4">
       <form onSubmit={onSubmit}>
         <FormInput type="text" name="username" setter={setUsername} />
+        <FormInput type="email" name="email" setter={setEmail} />
         <FormInput type="password" name="password" setter={setPassword} />
         <Button className="w-full" type="submit" disabled={disabled}>
-          login
+          register
         </Button>
         <Error message={error} />
       </form>
-      <RegistrationLink />
+      <LoginLink />
     </div>
   );
 }
 
-export default Login;
+export default Registration;
 
