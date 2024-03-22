@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { NavLink, useParams } from "react-router-dom";
+import NewAnimal from "./NewAnimal";
 
 function AttrRow({ animal, attr }) {
   const className = [
@@ -31,7 +32,7 @@ function AttrRow({ animal, attr }) {
 function NoAnimal() {
   return (
     <div className="font-bold text-2xl py-4 text-center">
-      select an animal
+      loading...
     </div>
   );
 }
@@ -91,7 +92,8 @@ function Animal() {
     );
   }
 
-  return <NoAnimal />;
+  // new component NewAnimal
+  return <NewAnimal />;
 }
 
 export default Animal;
