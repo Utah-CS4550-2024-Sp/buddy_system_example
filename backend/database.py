@@ -13,7 +13,7 @@ from backend.entities import (
 
 engine = create_engine(
     "sqlite:///backend/buddy_system.db",
-    echo=True,
+#   echo=True,
     connect_args={"check_same_thread": False},
 )
 

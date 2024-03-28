@@ -125,7 +125,7 @@ def register_new_user(
                 value=getattr(registration, field),
             )
 
-    hashed_password = pwd_context.hash(registration.password)
+    hashed_password = _hash_password(registration.password)
     user = UserInDB(
         **registration.model_dump(),
         hashed_password=hashed_password,
@@ -155,7 +155,7 @@ def _get_authenticated_user(
         select(UserInDB).where(UserInDB.username == form.username)
     ).first()
 
-    if user is None or not pwd_context.verify(form.password, user.hashed_password):
+    if user is None or not _verify_password(form.password, user.hashed_password):
         raise InvalidCredentials()
 
     return user
@@ -190,4 +190,20 @@ def _decode_access_token(session: Session, token: str) -> UserInDB:
         raise InvalidToken()
     except ValidationError():
         raise InvalidToken()
+
+
+def _hash_password(password: str) -> str:
+    try:
+        return pwd_context.hash(password)
+    except Exception as e:
+        print(f"hashing error: {e}")
+        raise InvalidToken()
+
+
+def _verify_password(password: str, hashed_password: str) -> bool:
+    try:
+        return pwd_context.verify(password, hashed_password)
+    except Exception as e:
+        print(f"verification error: {e}")
+        return False
 
