@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { useAuth } from "../context/auth";
-import { useUser } from "../context/user";
+import { useAuth, useUser } from "../hooks";
 
 function NavItem({ to, name, right }) {
   const className = [

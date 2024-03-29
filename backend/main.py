@@ -3,11 +3,15 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, HTMLResponse
+from mangum import Mangum
 
 from backend.auth import auth_router
 from backend.routers.animals import animals_router
 from backend.routers.users import users_router
-from backend.database import create_db_and_tables, EntityNotFoundException
+from backend.database import (
+    create_db_and_tables,
+    EntityNotFoundException,
+)
 
 
 @asynccontextmanager
@@ -77,4 +81,7 @@ def greet():
     """Greet a collection of people."""
     greeting = "hello to nobody"
     return {"greeting": greeting}
+
+
+lambda_handler = Mangum(app)
 
