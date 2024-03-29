@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, NavLink, Navigate, Routes, Route } from 'react-router-dom';
-import { AuthProvider, useAuth } from "./context/auth";
+import { AuthProvider } from "./context/auth";
 import { UserProvider } from "./context/user";
+import { useAuth } from "./hooks";
 import Animals from './components/Animals';
 import Counter from "./components/Counter";
 import LeftNav from "./components/LeftNav";

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
-import { useUser } from "../context/user";
+import { useAuth, useUser } from "../hooks";
 import Button from "./Button";
 import FormInput from "./FormInput";
 

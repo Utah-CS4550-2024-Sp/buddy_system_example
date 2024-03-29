@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { NavLink, useParams } from "react-router-dom";
+import { useApi } from "../hooks";
 import NewAnimal from "./NewAnimal";
 
 function AttrRow({ animal, attr }) {
@@ -67,10 +68,11 @@ function AnimalCard({ animal }) {
 }
 
 function AnimalCardQueryContainer({ animalId }) {
+  const api = useApi();
   const { data } = useQuery({
     queryKey: ["animals", animalId],
     queryFn: () => (
-      fetch(`http://127.0.0.1:8000/animals/${animalId}`)
+      api.get(`/animals/${animalId}`)
         .then((response) => response.json())
     ),
     enabled: animalId !== undefined,
@@ -92,7 +94,6 @@ function Animal() {
     );
   }
 
-  // new component NewAnimal
   return <NewAnimal />;
 }
 

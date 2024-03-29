@@ -8,7 +8,10 @@ from mangum import Mangum
 from backend.auth import auth_router
 from backend.routers.animals import animals_router
 from backend.routers.users import users_router
-from backend.database import create_db_and_tables, EntityNotFoundException
+from backend.database import (
+    create_db_and_tables,
+    EntityNotFoundException,
+)
 
 
 @asynccontextmanager
@@ -80,8 +83,5 @@ def greet():
     return {"greeting": greeting}
 
 
-lambda_app = FastAPI()
-lambda_app.mount("/default", app)
-
-handler = Mangum(lambda_app)
+lambda_handler = Mangum(app)
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/auth";
+import { useAuth, useApi } from "../hooks";
 import Button from "./Button";
 
 function Input(props) {
@@ -37,30 +37,24 @@ function NewAnimalForm() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { token } = useAuth();
+  const api = useApi();
 
   const [name, setName] = useState("");
   const [kind, setKind] = useState("");
   const [age, setAge] = useState(0);
-  const [fixed, setFixed] = useState(true);
+  const [fixed, setFixed] = useState(false);
   const [vaccinated, setVaccinated] = useState(false);
 
   const mutation = useMutation({
     mutationFn: () => (
-      fetch(
-        "http://127.0.0.1:8000/animals",
+      api.post(
+        "/animals",
         {
-          method: "POST",
-          headers: {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            kind,
-            age,
-            fixed,
-            vaccinated,
-          }),
+          name,
+          kind,
+          age,
+          fixed,
+          vaccinated,
         },
       ).then((response) => response.json())
     ),
@@ -69,7 +63,6 @@ function NewAnimalForm() {
         queryKey: ["animals"],
       });
       navigate(`/animals/${data.animal.id}`);
-      // alternatively, we could "reset" the form
     },
   });
 

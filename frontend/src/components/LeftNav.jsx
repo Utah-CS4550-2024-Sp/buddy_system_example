@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "react-query";
+import { useApi } from "../hooks";
 
 const emptyAnimal = (id) => ({
   id,
@@ -32,11 +33,12 @@ function Link({ animal }) {
 
 function LeftNav() {
   const [search, setSearch] = useState("");
+  const api = useApi();
 
   const { data } = useQuery({
     queryKey: ["animals"],
     queryFn: () => (
-      fetch("http://127.0.0.1:8000/animals")
+      api.get("/animals")
         .then((response) => response.json())
     ),
   });
