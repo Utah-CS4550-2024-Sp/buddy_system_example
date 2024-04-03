@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import func
 from sqlmodel import Session, SQLModel, create_engine, select
 
@@ -11,11 +13,33 @@ from backend.entities import (
     Foster,
 )
 
-engine = create_engine(
-    "sqlite:///backend/buddy_system.db",
-#   echo=True,
-    connect_args={"check_same_thread": False},
-)
+
+def get_db_url():
+    loc = os.environ.get("DB_LOCATION")
+    if loc == "efs":
+        return "sqlite:////mnt/efs/buddy_system.db"
+    if loc == "rds":
+        username = os.environ.get("PG_USERNAME")
+        password = os.environ.get("PG_PASSWORD")
+        endpoint = os.environ.get("PG_ENDPOINT")
+        port = os.environ.get("PG_PORT")
+        return f"postgresql://{username}:{password}@{endpoint}:{port}/{username}"
+
+    return "sqlite:///backend/buddy_system.db"
+
+
+def get_engine():
+    db_url = get_db_url()
+    echo = os.environ.get("DB_DEBUG", default="False").lower() in ("true", "1", "t")
+    if os.environ.get("DB_LOCATION") == "rds":
+        connect_args = {}
+    else:
+        connect_args = {"check_same_thread": False}
+
+    return create_engine(db_url, echo=echo, connect_args=connect_args)
+
+
+engine = get_engine()
 
 
 def create_db_and_tables():
