@@ -21,6 +21,7 @@ function FormInput({ setter, ...props }) {
     <div className="flex flex-col py-2">
       <label htmlFor={props.name}>{props.name}</label>
       <input
+        id={props.name}
         {...props}
         className={className}
         onChange={onChange}
