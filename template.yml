@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Sam Template for Buddy System API
+
+Parameters:
+  JwtKey:
+    Type: String
+
+Resources:
+  Function:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: sam-buddy-system
+      MemorySize: 1024
+      Timeout: 10
+      CodeUri: ./build
+      Handler: backend.main.lambda_handler
+      Runtime: python3.11
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - AWSLambdaVPCAccessExecutionRole
+        - AWSXRayDaemonWriteAccess
+      Environment:
+        Variables:
+          JWT_KEY: !Ref JwtKey
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+  Api:
+    Type: AWS::Serverless::HttpApi
+
