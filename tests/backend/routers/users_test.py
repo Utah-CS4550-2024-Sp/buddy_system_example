@@ -15,7 +15,7 @@ def test_get_all_users(client, session, user_fixture):
     meta = response.json()["meta"]
     users = response.json()["users"]
 
-    assert meta["count"] == 3
+    assert meta["count"] == len(db_users)
     assert {user["username"] for user in users} == {
         db_user.username for db_user in db_users
     }
