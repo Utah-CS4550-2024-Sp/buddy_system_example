@@ -13,10 +13,13 @@ on:
       - "*"
 
 jobs:
+  # name: test
   test:
+    # environment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: code checkout
+        uses: actions/checkout@v4
 
       - name: install python
         uses: actions/setup-python@v4
