@@ -77,7 +77,7 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::654654520699:role/buddy-system-github-role
           role-session-name: buddy-system-sam-github-action
-          region: us-west-1
+          aws-region: us-west-1
 
       - name: setup build directory
         run: |
