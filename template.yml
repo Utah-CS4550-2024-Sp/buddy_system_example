@@ -20,10 +20,6 @@ Resources:
         - AWSLambdaBasicExecutionRole
         - AWSLambdaVPCAccessExecutionRole
         - AWSXRayDaemonWriteAccess
-      VpcConfig:
-        SecurityGroupIds:
-          - !Ref SecurityGroupId
-        SubnetIds: !Ref SubnetIds
       Environment:
         Variables:
           JWT_KEY: !Ref JwtKey
