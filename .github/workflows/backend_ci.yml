@@ -96,5 +96,5 @@ jobs:
         run: sam build
 
       - name: deploy
-        run: sam deploy --no-fail-on-empty-changeset --stack-name buddy-system --resolve-s3 --capabililties CAPABILITY_IAM --parameter-overrides JwtKey=${{ secrets.JWT_KEY }}
+        run: sam deploy --no-fail-on-empty-changeset --stack-name buddy-system --resolve-s3 --capabilities CAPABILITY_IAM --parameter-overrides JwtKey=${{ secrets.JWT_KEY }}
 
