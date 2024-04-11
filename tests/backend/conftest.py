@@ -2,7 +2,7 @@ from datetime import date, datetime
 
 import pytest
 from fastapi.testclient import TestClient
-from sqlmodel import Session, SQLModel, StaticPool, create_engine
+from sqlmodel import Session, SQLModel, StaticPool, create_engine, select
 
 from backend import auth
 from backend.main import app
@@ -79,15 +79,27 @@ def animal_fixture(session):
 
 @pytest.fixture
 def user_fixture(session):
+    def _find_user(attr: str, value: str) -> db.UserInDB | None:
+        return session.exec(
+            select(db.UserInDB).where(
+                getattr(db.UserInDB, attr) == value
+            ),
+        ).first()
+
     def _build_user(
         username: str = "juniper",
-        email: str = "juniper@cool.email",
         password: str = "password",
     ) -> db.UserInDB:
+        user = session.exec(
+            select(db.UserInDB).where(db.UserInDB.username == username),
+        ).first()
+        if user is not None:
+            return user
+
         return auth.register_new_user(
             auth.UserRegistration(
                 username=username,
-                email=email,
+                email=f"{username}@cool.email",
                 password=password,
             ),
             session,
