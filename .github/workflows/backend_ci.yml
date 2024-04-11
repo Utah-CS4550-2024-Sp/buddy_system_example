@@ -1,0 +1,42 @@
+name: backend-CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - *
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install python
+        uses: actions/setup-python@v4
+
+      - name: install poetry
+        uses: abatilo/actions-poetry@v2
+
+      - name: setup virtual environment
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+
+      - name: define cache for dependencies
+        uses: actions/cache@v3
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+
+      - name: install dependencies
+        run: poetry install
+
+  test:
+    needs: setup
+    steps:
+      - name: run pytest
+        run: poetry run pytest -v
+
