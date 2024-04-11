@@ -13,7 +13,7 @@ Resources:
       FunctionName: sam-buddy-system
       MemorySize: 1024
       Timeout: 10
-      CodeUri: ./deployment_build
+      CodeUri: ./build
       Handler: backend.main.lambda_handler
       Runtime: python3.11
       Policies:

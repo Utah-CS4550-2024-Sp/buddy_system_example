@@ -160,5 +160,5 @@ cython_debug/
 # .idea/
 
 .aws-sam
-deployment_build
+build
 
