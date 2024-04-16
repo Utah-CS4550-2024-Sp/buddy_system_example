@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useApi, useAuth } from "../hooks";
+import { useApiWithoutToken, useAuth } from "../hooks";
 import Button from "./Button";
 import FormInput from "./FormInput";
 
@@ -36,7 +36,7 @@ function Registration() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const api = useApi();
+  const api = useApiWithoutToken();
   const navigate = useNavigate();
 
   const disabled = username === "" || email === "" || password === "";
