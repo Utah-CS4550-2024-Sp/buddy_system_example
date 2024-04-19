@@ -43,7 +43,7 @@ function LeftNav() {
     ),
   });
 
-  const regex = new RegExp(search.split("").join(".*"));
+  const regex = new RegExp(".*" + search + ".*");
 
   const animals = ( data?.animals || [1, 2, 3].map(emptyAnimal)
   ).filter((animal) => (
